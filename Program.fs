@@ -21,6 +21,9 @@ module Sample =
       Application.Top.Running <- false
       Application.RequestStop()
       stop.Invoke()
+      let p = System.Diagnostics.Process.GetCurrentProcess()
+      System.Console.Clear()
+      p.Kill()
       model, Cmd.none
   let view model dispatch =
     page [
