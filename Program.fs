@@ -1,21 +1,26 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
+open Terminal.Gui
 open Terminal.Gui.Elmish
+
 module Sample =
   type Model = {Value:int}
   type Msg =
     |Inc
     |Dec
     |Quit
+  let stop = Action Application.RequestStop
   let init () = {Value=0}, Cmd.none
   let update msg (model:Model) =
     match msg with
     | Inc -> {model with Value = model.Value + 1}, Cmd.none
     | Dec -> {model with Value = model.Value - 1}, Cmd.none
     | Quit ->
-      // does not work
-      Terminal.Gui.Application.RequestStop() //Program.Quit();
+      // nothing works
+      Application.Top.Running <- false
+      Application.RequestStop()
+      stop.Invoke()
       model, Cmd.none
   let view model dispatch =
     page [
@@ -49,7 +54,6 @@ module Sample =
           Text "Quit"
           OnClicked (fun () -> dispatch Quit)
         ]
-
       ]
     ]
 
